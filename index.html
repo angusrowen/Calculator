@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Findex Calculators</title>
+    <style>
+        :root {
+            --fn-dk: #1a1f2e;
+            --fn-nv: #2a2f3e;
+            --fn-or: #e8633e;
+            --fn-gr: #00b67a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+            background: var(--fn-dk);
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--fn-nv);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 2px solid var(--fn-or);
+        }
+
+        .header img {
+            height: 32px;
+        }
+
+        .header-divider {
+            width: 1px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+        }
+
+        .main h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .main p {
+            font-size: 14px;
+            color: #a0a0a0;
+            margin-bottom: 32px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 640px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--fn-nv);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--fn-or);
+            transform: translateY(-2px);
+        }
+
+        .card-label {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .label-tax {
+            background: rgba(232, 99, 62, 0.15);
+            color: var(--fn-or);
+        }
+
+        .label-fee {
+            background: rgba(0, 182, 122, 0.15);
+            color: var(--fn-gr);
+        }
+
+        .card h2 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 13px;
+            color: #a0a0a0;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .card-arrow {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--fn-or);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 16px 24px;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer a {
+            color: var(--fn-or);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <img src="https://www.findex.com.au/hubfs/Findex-White.svg" alt="Findex" onerror="this.style.display='none'">
+        <div class="header-divider"></div>
+        <span class="header-title">Calculators</span>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+        <h1>Findex Calculators</h1>
+        <p>Select a calculator to get started.</p>
+
+        <div class="card-grid">
+
+            <a href="income-tax-calculator.html" class="card">
+                <span class="card-label label-tax">Tax</span>
+                <h2>Income Tax Calculator</h2>
+                <p>Estimate individual income tax, including Medicare levy and LMITO, across multiple financial years.</p>
+                <span class="card-arrow">Open calculator &#8594;</span>
+            </a>
+
+            <a href="fee-deductibility-calculator.html" class="card">
+                <span class="card-label label-fee">Fees</span>
+                <h2>Fee Deductibility Calculator</h2>
+                <p>Calculate the deductible portion of financial adviser fees based on TD 2024/7 guidelines.</p>
+                <span class="card-arrow">Open calculator &#8594;</span>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2026 <a href="https://www.findex.com.au" target="_blank">Findex</a>. For internal and adviser use only.
+    </div>
+
+</body>
+</html>
