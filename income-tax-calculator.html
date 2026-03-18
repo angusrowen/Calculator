@@ -144,7 +144,7 @@ body {
 <div class="main-wrapper"><div class="container"><div class="layout">
   <div>
     <div class="card">
-      <h2>Your Details</h2>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--fn-gr);">   <h2 style="margin:0;padding:0;border:none;">Your Details</h2>   <button class="btn-action btn-reset" onclick="resetAll()"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Reset</button> </div>
       <div class="section-label">Income</div>
       <div class="field"><label>Financial Year</label><select id="financialYear"><option value="2023-24">2023-24</option><option value="2024-25">2024-25</option><option value="2025-26" selected>2025-26</option></select></div>
       <div class="toggle-group"><span class="toggle-label">Income Entry Method</span><div class="toggle-switch"><input type="radio" name="incMethod" id="methodAnnual" value="annual" checked><label for="methodAnnual">Annual Salary</label><input type="radio" name="incMethod" id="methodHourly" value="hourly"><label for="methodHourly">Hourly Rate</label></div></div>
@@ -199,7 +199,6 @@ body {
         <div><div class="section-title">Key Rates: <span id="ratesYear">FY 2025-26</span></div><table class="key-rates-table"><thead><tr><th>Parameter</th><th>Value</th></tr></thead><tbody id="ratesBody"></tbody></table></div>
       </div>
       <div class="actions-bar">
-        <button class="btn-action btn-reset" onclick="resetAll()"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Reset</button>
         <button class="btn-action btn-export" onclick="exportCSV()"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zm-3-7l-4 4-4-4h2.5v-3h3v3H15z"/></svg>Export CSV</button>
       </div>
       <p class="note">This calculator provides estimates only. It does not account for all deductions, private health insurance rebates, or other individual circumstances. Super contributions tax (15%) on concessional contributions is paid inside the fund. Division 293 tax is paid from your super fund or by personal assessment. Family Tax Benefit estimates are indicative only. Consult a registered tax agent or Services Australia for personal advice.</p>
