@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transition to Retirement Calculator</title>
+<style>
+  :root{--header-dark:#1a1f2e;--header-navy:#2a2f3e;--accent-orange:#e8633e;--accent-green:#00b67a;--accent-green-light:#e6f9f1;--bg:#f0f2f5;--card:#fff;--border:#dce1e6;--text:#2c3e50;--text-light:#5a6a7a;--green:#00b67a;--red:#e74c3c;--orange:#f39c12;--purple:#8e44ad;--blue:#3498db;--blue-light:#ebf5fb}
+  *{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--header-dark);color:var(--text);line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+  .topbar{background:var(--header-navy);padding:14px 32px;display:flex;align-items:center;gap:16px;border-bottom:3px solid var(--accent-orange)}.topbar-title{color:#fff;font-size:1.1rem;font-weight:700}.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}.topbar-badge{background:var(--accent-orange);color:#fff;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px}.topbar-fy{color:rgba(255,255,255,.6);font-size:.82rem}
+  .main-wrapper{background:var(--bg);flex:1;padding:24px 32px}.container{max-width:1600px;margin:0 auto}
+  .input-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}@media(max-width:1100px){.input-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.input-grid{grid-template-columns:1fr}}
+  .action-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}.action-bar .btn{width:auto;flex:1;min-width:140px;max-width:250px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:0;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden}.card h2{font-size:.95rem;margin-bottom:14px;padding-bottom:7px;border-bottom:2px solid var(--accent-green);color:var(--header-dark)}
+  .section-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--accent-green);margin-top:14px;margin-bottom:8px;padding-top:10px;border-top:1px solid var(--border)}.section-label:first-of-type{margin-top:0;padding-top:0;border-top:none}.section-note{font-size:.73rem;color:var(--text-light);font-style:italic;margin-bottom:10px}
+  .field{margin-bottom:12px}.field label{display:block;font-size:.78rem;font-weight:600;margin-bottom:3px;color:var(--text-light);text-transform:uppercase;letter-spacing:.3px}.field-hint{font-size:.72rem;color:var(--text-light);margin-top:2px}.field input,.field select{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.9rem;color:var(--text);background:#fff}.field input:focus,.field select:focus{outline:none;border-color:var(--accent-green);box-shadow:0 0 0 3px rgba(0,182,122,.12)}.field input:disabled{background:var(--bg);color:var(--text-light)}.inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .checkbox-field{display:flex;align-items:center;gap:7px;margin-bottom:8px}.checkbox-field input[type="checkbox"]{width:16px;height:16px;accent-color:var(--accent-green);flex-shrink:0}.checkbox-field label{font-size:.84rem;font-weight:500;cursor:pointer}
+  .info-box{border-radius:6px;padding:9px 12px;margin-bottom:12px;font-size:.82rem;color:var(--text);word-wrap:break-word}.info-box strong{color:var(--header-dark)}.info-box.green{background:var(--accent-green-light);border:1px solid var(--accent-green)}.info-box.red{background:#fdecea;border:1px solid var(--red)}.info-box.blue{background:var(--blue-light);border:1px solid var(--blue)}.info-box .sub{font-size:.75rem;color:var(--text-light);margin-top:2px}
+  .disclaimer{background:#fef5e7;border:1px solid var(--orange);border-radius:8px;padding:10px 14px;margin-bottom:18px;font-size:.8rem;color:var(--text);line-height:1.5}
+  .btn{padding:10px 16px;background:var(--accent-green);color:#fff;border:none;border-radius:6px;font-size:.9rem;font-weight:600;cursor:pointer}.btn:hover{background:#009a66}.btn-reset{background:#fff;color:var(--text-light);border:1px solid var(--border)}.btn-reset:hover{border-color:var(--accent-green);color:var(--accent-green);background:#fff}.btn-orange{background:var(--accent-orange)}.btn-orange:hover{background:#d4552f}.btn-blue{background:var(--blue)}.btn-blue:hover{background:#2980b9}.btn-purple{background:var(--purple)}.btn-purple:hover{background:#7d3c98}.btn-sm{padding:7px 12px;font-size:.8rem}.btn-full{width:100%;margin-top:5px}
+  .results-section{margin-top:0}
+  .results-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:18px}@media(max-width:1000px){.results-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){.results-grid{grid-template-columns:1fr 1fr}}
+  .result-box{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 12px}.result-box.highlight{background:var(--accent-green-light);border-color:var(--accent-green)}.result-box.full{grid-column:1/-1}.result-box.half{grid-column:span 3}@media(max-width:1000px){.result-box.half{grid-column:1/-1}}
+  .result-box .label{font-size:.7rem;text-transform:uppercase;letter-spacing:.3px;color:var(--text-light);font-weight:600;margin-bottom:2px}.result-box .value{font-size:1.1rem;font-weight:700;color:var(--header-dark)}.result-box.highlight .value{color:var(--accent-green);font-size:1.2rem}.result-box .sub{font-size:.7rem;color:var(--text-light);margin-top:2px}
+  .tab-bar{display:flex;gap:4px;flex-wrap:wrap}.tab-btn{padding:7px 14px;border:1px solid var(--border);border-bottom:none;background:var(--bg);color:var(--text-light);border-radius:6px 6px 0 0;cursor:pointer;font-size:.8rem;font-weight:600}.tab-btn.active{background:var(--card);color:var(--accent-green);border-bottom:1px solid var(--card);margin-bottom:-1px;position:relative;z-index:1}.tab-body{border:1px solid var(--border);border-radius:0 8px 8px 8px;background:var(--card);padding:14px}.tab-content{display:none}.tab-content.active{display:block}
+  .data-table{width:100%;border-collapse:collapse;font-size:.8rem}.data-table th{text-align:left;padding:7px 6px;background:var(--bg);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.3px;color:var(--text-light);border-bottom:2px solid var(--border);white-space:nowrap}.data-table th.r,.data-table td.r{text-align:right}.data-table td{padding:6px;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums}.data-table tr:last-child td{border-bottom:none}.data-table tr:hover{background:rgba(0,182,122,.03)}.pos{color:var(--green)}.neg{color:var(--red)}
+  .cf-row{display:flex;gap:5px;margin-bottom:6px;align-items:center}.cf-row .cf-label{font-size:.8rem;color:var(--text-light);width:44px;flex-shrink:0}.cf-row input{flex:1;min-width:0;padding:6px 7px;border:1px solid var(--border);border-radius:5px;font-size:.8rem;color:var(--text);background:#fff}.cf-row input:disabled{background:var(--bg);color:var(--text-light)}.cf-row input:focus{outline:none;border-color:var(--accent-green);box-shadow:0 0 0 3px rgba(0,182,122,.12)}.cf-row .cf-unused{font-size:.78rem;color:var(--green);width:62px;flex-shrink:0;text-align:right;font-weight:600}
+  .cf-header-row{display:flex;gap:5px;margin-bottom:3px;font-size:.68rem;font-weight:600;color:var(--text-light);text-transform:uppercase}.cf-header-row span:first-child{width:44px;flex-shrink:0}.cf-header-row span{flex:1;min-width:0}.cf-header-row span:last-child{width:62px;flex-shrink:0;text-align:right}
+  .yr-row{display:flex;gap:5px;margin-bottom:5px;align-items:center}.yr-row .yr-label{font-size:.8rem;color:var(--text-light);width:48px;flex-shrink:0}.yr-row input{flex:1;min-width:0;padding:6px 7px;border:1px solid var(--border);border-radius:5px;font-size:.8rem;color:var(--text);background:#fff}.yr-row input:focus{outline:none;border-color:var(--accent-green);box-shadow:0 0 0 3px rgba(0,182,122,.12)}
+  .yr-header{display:flex;gap:5px;margin-bottom:3px;font-size:.68rem;font-weight:600;color:var(--text-light);text-transform:uppercase}.yr-header span:first-child{width:48px;flex-shrink:0}.yr-header span{flex:1;min-width:0}
+  .check-item{padding:5px 0;font-size:.82rem;display:flex;align-items:flex-start;gap:7px;line-height:1.4}.check-icon{flex-shrink:0;margin-top:1px;font-weight:700}
+  .note{font-size:.75rem;color:var(--text-light);margin-top:14px;padding-top:10px;border-top:1px solid var(--border);line-height:1.5}.table-scroll{overflow-x:auto}
+  .chart-area{margin-top:16px}.chart-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px}.chart-box h3{font-size:.85rem;font-weight:700;color:var(--header-dark);margin-bottom:6px}.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px}.chart-legend-item{display:flex;align-items:center;gap:5px;font-size:.75rem;color:var(--text)}.chart-legend-swatch{width:20px;height:3px;border-radius:2px;flex-shrink:0}
+  .footer{background:var(--header-navy);padding:10px 32px;border-top:3px solid var(--accent-orange)}
+  .recommend-results{margin-top:8px;padding:10px;background:var(--accent-green-light);border:1px solid var(--accent-green);border-radius:6px;font-size:.82rem;display:none;line-height:1.5}.recommend-results strong{color:var(--header-dark)}
+  .export-bar{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}#results{display:none}
+  .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}@keyframes spin{to{transform:rotate(360deg)}}
+  .card-results{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}.card-results h2{font-size:.95rem;margin-bottom:14px;padding-bottom:7px;border-bottom:2px solid var(--accent-green);color:var(--header-dark)}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-title">Transition to Retirement Calculator</div><div class="topbar-right"><span class="topbar-badge">FY 2025-26</span><span class="topbar-fy">1 Jul 2025 – 30 Jun 2026</span></div></div>
+<div class="main-wrapper"><div class="container">
+<div class="disclaimer">This calculator provides estimates only and is not financial advice. Consult a licensed financial adviser before implementing a TTR strategy. All figures use FY 2025-26 rates and assume current rules continue unchanged.</div>
+<div class="input-grid">
+  <div>
+    <div class="card"><h2>Personal Details</h2><div class="inline-fields"><div class="field"><label>Date of Birth</label><input type="date" id="dob" value="1965-07-01"></div><div class="field"><label>Retirement Age</label><input type="number" id="retirementAge" value="65" min="55" max="75"></div></div><div class="info-box green" id="paDisplay">Preservation Age: <strong>-</strong></div><div class="info-box green" id="eligDisplay">Eligibility: checking...</div></div>
+    <div class="card" style="margin-top:16px;"><h2>Income &amp; Super</h2><div class="section-note">All dollar amounts are annual figures.</div><div class="field"><label>Gross Salary ($)</label><input type="text" id="grossSalary" value="100,000" inputmode="numeric"></div><div class="field"><label>Current Super Balance ($)</label><input type="text" id="superBalance" value="400,000" inputmode="numeric"></div><div class="inline-fields"><div class="field"><label>Employer SG (%)</label><input type="number" id="sgRate" value="12" min="0" max="30" step="0.5"></div><div class="field"><label>Return (%)</label><input type="number" id="investReturn" value="7" min="0" max="20" step="0.5"></div></div><div class="field"><label>Existing Salary Sacrifice ($)</label><input type="text" id="existingCC" value="0" inputmode="numeric"><div class="field-hint">Excluding employer SG.</div></div></div>
+  </div>
+  <div>
+    <div class="card"><h2>TTR Strategy</h2><div class="section-note">All dollar amounts are annual.</div>
+      <div class="checkbox-field"><input type="checkbox" id="useProRata"><label for="useProRata">Starts partway through FY</label></div>
+      <div id="proRataFields" style="display:none;"><div class="field"><label>Start Date</label><input type="date" id="startDate" value="2026-01-01"></div><div id="proRataDisplay" class="info-box blue" style="display:none;"></div></div>
+      <div class="field"><label>Additional Salary Sacrifice ($)</label><input type="text" id="salarySacrifice" value="20,000" inputmode="numeric"></div>
+      <div class="field"><label>Default Drawdown Rate (%)</label><input type="number" id="drawdownRate" value="2.5" min="2" max="10" step="0.1"><div class="field-hint">Min 2% (under 65). Max 10%.</div></div>
+      <div class="checkbox-field"><input type="checkbox" id="reinvestPension"><label for="reinvestPension">Reinvest pension income</label></div>
+      <div class="section-label">Per-Year Drawdown</div><div class="checkbox-field"><input type="checkbox" id="usePerYearDR"><label for="usePerYearDR">Set per year</label></div><div id="perYearDRArea" style="display:none;"><div class="yr-header"><span>Year</span><span>DR %</span></div><div id="perYearDRRows"></div></div>
+      <div class="section-label">Optimisation</div>
+      <button class="btn btn-orange btn-full" id="btnRecommend" onclick="recommend(false,false)">Recommend Optimal Values</button>
+      <button class="btn btn-purple btn-full" id="btnOptDR" onclick="recommend(false,true)">Optimise Drawdown Only</button>
+      <div class="recommend-results" id="recommendResults"></div>
+    </div>
+    <div class="card" style="margin-top:16px;"><h2>Medicare &amp; Health</h2><div class="checkbox-field"><input type="checkbox" id="hasPrivateHealth" checked><label for="hasPrivateHealth">Private hospital cover</label></div><div class="field"><label>MLS Status</label><select id="mlsStatus"><option value="single">Single</option><option value="family">Family</option></select></div></div>
+  </div>
+  <div>
+    <div class="card"><h2>Carry-Forward Contributions</h2><div class="info-box blue" style="font-size:.78rem;">Super balance must be below $500,000 on 30 June of the prior year to access unused cap from up to 5 prior years.</div><div class="checkbox-field"><input type="checkbox" id="useCarryForward"><label for="useCarryForward">Model carry-forward</label></div>
+      <div id="cfInputs" style="display:none;">
+        <div class="field"><label>Super at 30 Jun 2025 ($)</label><input type="text" id="priorSuperBal" value="400,000" inputmode="numeric"></div>
+        <div class="section-label">Unused Cap History</div>
+        <div class="cf-header-row"><span>FY</span><span>Cap</span><span>Actual</span><span>Unused</span></div>
+        <div class="cf-row"><span class="cf-label">20-21</span><input value="25,000" disabled><input id="cc2021" value="14,000" inputmode="numeric" class="cf-input"><span class="cf-unused" id="unused2021">$11,000</span></div>
+        <div class="cf-row"><span class="cf-label">21-22</span><input value="27,500" disabled><input id="cc2122" value="15,000" inputmode="numeric" class="cf-input"><span class="cf-unused" id="unused2122">$12,500</span></div>
+        <div class="cf-row"><span class="cf-label">22-23</span><input value="27,500" disabled><input id="cc2223" value="16,000" inputmode="numeric" class="cf-input"><span class="cf-unused" id="unused2223">$11,500</span></div>
+        <div class="cf-row"><span class="cf-label">23-24</span><input value="27,500" disabled><input id="cc2324" value="18,000" inputmode="numeric" class="cf-input"><span class="cf-unused" id="unused2324">$9,500</span></div>
+        <div class="cf-row"><span class="cf-label">24-25</span><input value="30,000" disabled><input id="cc2425" value="14,000" inputmode="numeric" class="cf-input"><span class="cf-unused" id="unused2425">$16,000</span></div>
+        <div class="info-box green" id="totalCFDisplay" style="margin-top:10px;">Total Available: <strong>$60,500</strong></div>
+        <div class="section-label">CF Per Year</div><div class="section-note">Additional to standard SS.</div><div id="cfUtiliseRows"></div>
+        <div class="section-label">CF Optimisation</div>
+        <button class="btn btn-orange btn-full" id="btnRecommendCF" onclick="recommend(true,false)">Optimal Values (incl. CF)</button>
+        <button class="btn btn-purple btn-full" id="btnOptDRCF" onclick="recommend(true,true)">Optimise DR Only (incl. CF)</button>
+        <div class="recommend-results" id="recommendResultsCF"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="action-bar">
+  <button class="btn" onclick="calculate()">Calculate TTR Strategy</button>
+  <button class="btn btn-reset" id="btnUndo" onclick="undo()" disabled>Undo</button>
+  <button class="btn btn-reset" onclick="resetForm()">Reset</button>
+</div>
+<div id="results" class="results-section">
+  <div class="card-results"><h2>Strategy Summary</h2><div class="results-grid" id="summaryGrid"></div></div>
+  <div class="card-results"><h2>Eligibility &amp; Limits</h2><div id="checksArea"></div></div>
+  <div class="card-results" style="padding-bottom:0;"><h2>Detailed Projections</h2>
+    <div class="tab-bar" id="tabBar"><button class="tab-btn active" data-tab="base">Base Case</button><button class="tab-btn" data-tab="ttr">TTR Strategy</button><button class="tab-btn" data-tab="compare">Comparison</button><button class="tab-btn" data-tab="cf" id="cfTabBtn" style="display:none;">Carry-Forward</button></div>
+    <div class="tab-body"><div class="tab-content active" id="tab-base"><div class="table-scroll" id="baseTable"></div><div class="chart-area" id="baseChartArea"></div></div><div class="tab-content" id="tab-ttr"><div class="table-scroll" id="ttrTable"></div><div class="chart-area" id="ttrChartArea"></div></div><div class="tab-content" id="tab-compare"><div class="table-scroll" id="compareTable"></div><div class="chart-area" id="compareChartArea"></div></div><div class="tab-content" id="tab-cf"><div class="table-scroll" id="cfTable"></div></div></div>
+  </div>
+  <div class="export-bar"><button class="btn btn-blue btn-sm" onclick="exportCSV('base')">Export Base CSV</button><button class="btn btn-blue btn-sm" onclick="exportCSV('ttr')">Export TTR CSV</button><button class="btn btn-blue btn-sm" onclick="exportCSV('compare')">Export Comparison CSV</button></div>
+  <p class="note"><strong>Assumptions:</strong> FY 2025-26 rates assumed constant. Returns uniform before tax. Super earnings: 15% accum, 0% pension. Div 293 where income+CCs>$250k. DR min age-based, max 10%. ML 2%. MLS thresholds: single $101k/$118k/$158k, family $202k/$236k/$316k. LITO applied. Pro-rata: SG full year, SS/drawdown pro-rated.</p>
+</div>
+</div></div>
+<div class="footer"></div>
+<script>
+var undoStack=[];
+function saveState(){var ids=['dob','retirementAge','grossSalary','superBalance','sgRate','investReturn','existingCC','salarySacrifice','drawdownRate','startDate','mlsStatus','priorSuperBal'];var state={};ids.forEach(function(id){state[id]=document.getElementById(id).value});['useProRata','reinvestPension','hasPrivateHealth','usePerYearDR','useCarryForward'].forEach(function(id){state[id]=document.getElementById(id).checked});state.drYears={};document.querySelectorAll('.dr-year-input').forEach(function(el){state.drYears[el.dataset.year]=el.value});state.cfYears={};document.querySelectorAll('.cf-utilise-input').forEach(function(el){state.cfYears[el.dataset.year]=el.value});state.cfActuals={};['cc2021','cc2122','cc2223','cc2324','cc2425'].forEach(function(id){state.cfActuals[id]=document.getElementById(id).value});undoStack.push(state);if(undoStack.length>20)undoStack.shift();document.getElementById('btnUndo').disabled=false}
+function undo(){if(undoStack.length===0)return;var state=undoStack.pop();['dob','retirementAge','grossSalary','superBalance','sgRate','investReturn','existingCC','salarySacrifice','drawdownRate','startDate','mlsStatus','priorSuperBal'].forEach(function(id){document.getElementById(id).value=state[id]});['useProRata','reinvestPension','hasPrivateHealth','usePerYearDR','useCarryForward'].forEach(function(id){document.getElementById(id).checked=state[id]});document.getElementById('proRataFields').style.display=state.useProRata?'block':'none';document.getElementById('perYearDRArea').style.display=state.usePerYearDR?'block':'none';document.getElementById('cfInputs').style.display=state.useCarryForward?'block':'none';Object.keys(state.cfActuals).forEach(function(id){document.getElementById(id).value=state.cfActuals[id]});updatePA();updateCF();updateProRata();if(state.usePerYearDR){buildDRRows();document.querySelectorAll('.dr-year-input').forEach(function(el){if(state.drYears[el.dataset.year])el.value=state.drYears[el.dataset.year]})}document.querySelectorAll('.cf-utilise-input').forEach(function(el){if(state.cfYears[el.dataset.year])el.value=state.cfYears[el.dataset.year]});document.getElementById('btnUndo').disabled=undoStack.length===0;calculate()}
+
+function pn(v){return typeof v==='number'?v:parseFloat(String(v).replace(/[^0-9.\-]/g,''))||0}
+function fmt(n){if(n==null||isNaN(n))return'$0';var a=Math.abs(Math.round(n));return(n<0?'-$':'$')+a.toLocaleString('en-AU')}
+function fmtAxis(n){var a=Math.abs(n);if(a>=1e6)return(n<0?'-':'')+'$'+(Math.abs(n)/1e6).toFixed(1)+'M';if(a>=1e3)return(n<0?'-':'')+'$'+Math.round(Math.abs(n)/1e3)+'k';return'$'+Math.round(n)}
+document.addEventListener('focusout',function(e){if(e.target.matches('input[inputmode="numeric"]')){var v=pn(e.target.value);if(v)e.target.value=v.toLocaleString('en-AU')}});
+function getPA(d){var x=new Date(d);if(x<new Date(1960,6,1))return 55;if(x<new Date(1961,6,1))return 56;if(x<new Date(1962,6,1))return 57;if(x<new Date(1963,6,1))return 58;if(x<new Date(1964,6,1))return 59;return 60}
+function getAge(d){var x=new Date(d),n=new Date(2026,1,26);var a=n.getFullYear()-x.getFullYear();if(n.getMonth()-x.getMonth()<0||(n.getMonth()===x.getMonth()&&n.getDate()<x.getDate()))a--;return a}
+function getMinDR(a){if(a<65)return .02;if(a<75)return .025;if(a<80)return .03;if(a<85)return .035;if(a<90)return .045;if(a<95)return .055;return .07}
+function getYears(){return Math.max(1,pn(document.getElementById('retirementAge').value)-getAge(document.getElementById('dob').value))}
+function roundDR(dr){return Math.round(dr*1000)/1000}
+function getProRata(){if(!document.getElementById('useProRata').checked)return 1;var sd=document.getElementById('startDate').value;if(!sd)return 1;var d=new Date(sd),fyS=new Date(2025,6,1),fyE=new Date(2026,5,30);if(d<=fyS)return 1;if(d>fyE)return 0;return Math.max(0,Math.min(1,((fyE-d)/864e5+1)/((fyE-fyS)/864e5+1)))}
+function updateProRata(){var el=document.getElementById('proRataDisplay');if(!document.getElementById('useProRata').checked){el.style.display='none';return}var f=getProRata();if(f>=.999){el.style.display='none';return}el.style.display='block';el.innerHTML='<strong>Pro-Rata: '+(f*100).toFixed(1)+'%</strong> (~'+Math.round(f*12*10)/10+' months)'}
+document.getElementById('useProRata').addEventListener('change',function(){document.getElementById('proRataFields').style.display=this.checked?'block':'none';updateProRata()});document.getElementById('startDate').addEventListener('change',updateProRata);
+function updatePA(){var d=document.getElementById('dob').value;if(!d)return;var p=getPA(d),a=getAge(d);document.getElementById('paDisplay').innerHTML='Preservation Age: <strong>'+p+'</strong><div class="sub">Currently '+a+' years old</div>';var e=document.getElementById('eligDisplay');if(a>=p&&a<65){e.className='info-box green';e.innerHTML='<strong>Eligible for TTR</strong><div class="sub">Preservation age '+p+', under 65.</div>'}else if(a>=65){e.className='info-box blue';e.innerHTML='<strong>Over 65</strong><div class="sub">Unrestricted super access.</div>'}else{e.className='info-box red';e.innerHTML='<strong>Not yet eligible</strong><div class="sub">Age '+a+'. Need '+p+'.</div>'}buildYearRows()}
+document.getElementById('dob').addEventListener('change',updatePA);document.getElementById('retirementAge').addEventListener('change',function(){buildYearRows()});document.getElementById('drawdownRate').addEventListener('change',function(){fillDefaultDR()});document.getElementById('usePerYearDR').addEventListener('change',function(){document.getElementById('perYearDRArea').style.display=this.checked?'block':'none';if(this.checked)buildDRRows()});updatePA();
+function buildYearRows(){buildCFURows();if(document.getElementById('usePerYearDR').checked)buildDRRows()}
+function buildDRRows(){var y=getYears(),d=pn(document.getElementById('drawdownRate').value),c=document.getElementById('perYearDRRows'),ex={};c.querySelectorAll('input').forEach(function(el){ex[el.dataset.year]=el.value});var h='';for(var i=1;i<=y;i++)h+='<div class="yr-row"><span class="yr-label">Yr '+i+'</span><input type="number" data-year="'+i+'" class="dr-year-input" value="'+(ex[i]||d.toFixed(1))+'" min="2" max="10" step="0.1"></div>';c.innerHTML=h}
+function fillDefaultDR(){var d=pn(document.getElementById('drawdownRate').value);document.querySelectorAll('.dr-year-input').forEach(function(el){el.value=d.toFixed(1)})}
+function getDRPerYear(){if(!document.getElementById('usePerYearDR').checked)return null;var v=[];document.querySelectorAll('.dr-year-input').forEach(function(el){v.push(pn(el.value)/100)});return v}
+var cfCaps=[25000,27500,27500,27500,30000],cfIds=['cc2021','cc2122','cc2223','cc2324','cc2425'],cfUIDs=['unused2021','unused2122','unused2223','unused2324','unused2425'];
+function updateCF(){var t=0;for(var i=0;i<5;i++){var a=pn(document.getElementById(cfIds[i]).value),u=Math.max(0,cfCaps[i]-a);document.getElementById(cfUIDs[i]).textContent=fmt(u);t+=u}document.getElementById('totalCFDisplay').innerHTML='Total Available: <strong>'+fmt(t)+'</strong>';return t}
+function getCFAvail(){var t=0;for(var i=0;i<5;i++)t+=Math.max(0,cfCaps[i]-pn(document.getElementById(cfIds[i]).value));return t}
+document.querySelectorAll('.cf-input').forEach(function(el){el.addEventListener('input',updateCF)});document.getElementById('useCarryForward').addEventListener('change',function(){document.getElementById('cfInputs').style.display=this.checked?'block':'none';if(this.checked){updateCF();buildCFURows()}});updateCF();
+function buildCFURows(){var y=getYears(),c=document.getElementById('cfUtiliseRows'),ex={};c.querySelectorAll('input').forEach(function(el){ex[el.dataset.year]=el.value});var h='';for(var i=1;i<=y;i++)h+='<div class="yr-row"><span class="yr-label">Yr '+i+'</span><input type="text" data-year="'+i+'" class="cf-utilise-input" inputmode="numeric" value="'+(ex[i]||'0')+'"></div>';c.innerHTML=h}
+function getCFU(){var v=[];document.querySelectorAll('.cf-utilise-input').forEach(function(el){v.push(pn(el.value))});return v}
+document.getElementById('tabBar').addEventListener('click',function(e){if(!e.target.classList.contains('tab-btn'))return;document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});e.target.classList.add('active');document.getElementById('tab-'+e.target.dataset.tab).classList.add('active')});
+
+function calcIT(t){t=Math.max(0,t);if(t<=18200)return 0;if(t<=45000)return(t-18200)*.16;if(t<=135000)return 4288+(t-45000)*.30;if(t<=190000)return 31288+(t-135000)*.37;return 51638+(t-190000)*.45}
+function calcLITO(t){if(t<=45000)return 700;if(t<=66667)return Math.max(0,700-(t-45000)*.05);return Math.max(0,325-(t-66667)*.015)}
+function calcML(t){if(t<=26000)return 0;if(t<=32500)return(t-26000)*.10;return t*.02}
+function calcMLS(t,h,s){if(h)return 0;var a=s?101000:202000,b=s?118000:236000,c=s?158000:316000;if(t<=a)return 0;if(t<=b)return t*.01;if(t<=c)return t*.0125;return t*.015}
+function calcD293(i,c){var x=i+c;if(x<=250000)return 0;return Math.min(x-250000,c)*.15}
+function calcTax(t,h,s){var x=calcIT(t);x=Math.max(0,x-calcLITO(t));return{total:x+calcML(t)+calcMLS(t,h,s)}}
+
+var storedBase=[],storedTTR=[],storedCompare=[];
+function runSimPure(gross,superBal,sgPct,retPct,existCC,ss,drPct,hp,isSingle,years,curAge,cfAmts,cfAvail,useCF,drArr,proRata){
+  var ccCap=30000,baseR=[],ttrR=[],bS=superBal,tP=superBal,tA=0,cfUsed=0,pr=proRata!=null?proRata:1;
+  for(var y=1;y<=years;y++){var age=curAge+y,sg=gross*sgPct,yPR=(y===1)?pr:1;
+    var bCC=sg+existCC,bTI=gross-existCC,bTax=calcTax(bTI,hp,isSingle),bDiv=calcD293(gross,bCC),bNet=bTI-bTax.total;
+    var bE=bS*retPct;bS=bS+bE-bE*.15+bCC-Math.min(bCC,ccCap)*.15;
+    baseR.push({y:y,age:age,ti:bTI,tax:bTax.total,div293:bDiv,netPay:bNet,sg:sg,totalCC:bCC,earnings:bE,superBal:bS,proRata:yPR});
+    var cfThis=0;if(useCF&&cfAmts&&y<=cfAmts.length){var cfWant=(cfAmts[y-1]||0)*yPR;cfThis=Math.min(cfWant,Math.max(0,cfAvail-cfUsed));cfUsed+=cfThis}
+    var effSS=ss*yPR+cfThis,tCC=sg+existCC+effSS,tTI=Math.max(0,gross-existCC-effSS),tTax=calcTax(tTI,hp,isSingle),tNetSal=Math.max(0,tTI-tTax.total);
+    var yDR=(drArr&&drArr[y-1]!=null)?drArr[y-1]:drPct,minDR=getMinDR(age),actDR=Math.max(minDR,Math.min(.10,yDR));
+    var effDR=actDR*yPR,pDraw=tP*effDR,netP=pDraw;
+    if(age<60){var ct=calcTax(tTI+pDraw,hp,isSingle);netP=pDraw-Math.max(0,(ct.total-tTax.total)-pDraw*.15)}
+    var totalCash=tNetSal+netP,tDiv=calcD293(gross,tCC),pTax=age<60?pDraw-netP:0;
+    var pE=tP*retPct;tP=tP+pE-pDraw;var aE=tA*retPct,effCap=ccCap+cfThis;tA=tA+aE-aE*.15+tCC-Math.min(tCC,effCap)*.15;
+    ttrR.push({y:y,age:age,ss:effSS,cf:cfThis,ti:tTI,tax:tTax.total,div293:tDiv,netSalary:tNetSal,pensionDraw:pDraw,pensionTax:pTax,netPension:netP,totalCash:totalCash,sg:sg,totalCC:tCC,pBal:tP,aBal:tA,totalSuper:tP+tA,actDR:actDR,proRata:yPR})}
+  return{baseRows:baseR,ttrRows:ttrR}}
+function runSim(g,s,sg,r,e,ss,d,h,i,y,a,cf,u,dr){return runSimPure(g,s,sg,r,e,ss,d,h,i,y,a,cf,getCFAvail(),u,dr,getProRata())}
+
+function findRoundedDRs(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,inclCF,proRata){
+  var drArr=[];for(var y=0;y<years;y++)drArr.push(roundDR(getMinDR(curAge+y+1)));
+  for(var pass=0;pass<10;pass++){var anyChanged=false;
+    for(var y=0;y<years;y++){var res=runSimPure(gross,superBal,sgPct,retPct,existCC,ss,0,hp,isSingle,years,curAge,cfAlloc,cfAvail,inclCF,drArr,proRata);
+      if(res.ttrRows[y].totalCash-res.baseRows[y].netPay>=0)continue;var found=false;
+      for(var tryDR=roundDR(getMinDR(curAge+y+1));tryDR<=.100;tryDR=roundDR(tryDR+.001)){drArr[y]=tryDR;res=runSimPure(gross,superBal,sgPct,retPct,existCC,ss,0,hp,isSingle,years,curAge,cfAlloc,cfAvail,inclCF,drArr,proRata);if(res.ttrRows[y].totalCash-res.baseRows[y].netPay>=0){found=true;anyChanged=true;break}}if(!found)return null}if(!anyChanged)break}
+  var res=runSimPure(gross,superBal,sgPct,retPct,existCC,ss,0,hp,isSingle,years,curAge,cfAlloc,cfAvail,inclCF,drArr,proRata);
+  for(var y=0;y<years;y++){if(res.ttrRows[y].totalCash-res.baseRows[y].netPay<-.5)return null}
+  return{drArr:drArr,res:res}}
+
+function findMaxCFForYear(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,inclCF,proRata,yearIdx,maxCF){
+  var lo=0,hi=maxCF,bestCF=0;cfAlloc[yearIdx]=hi;
+  var result=findRoundedDRs(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,inclCF,proRata);
+  if(result)return{cf:hi,result:result};
+  for(var iter=0;iter<30;iter++){var mid=Math.round((lo+hi)/2/500)*500;if(mid<=lo||mid>=hi)break;cfAlloc[yearIdx]=mid;result=findRoundedDRs(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,inclCF,proRata);if(result){lo=mid;bestCF=mid}else hi=mid}
+  for(var fine=bestCF;fine<=Math.min(bestCF+1000,maxCF);fine+=100){cfAlloc[yearIdx]=fine;result=findRoundedDRs(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,inclCF,proRata);if(result)bestCF=fine;else break}
+  cfAlloc[yearIdx]=bestCF;result=findRoundedDRs(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,inclCF,proRata);
+  return{cf:bestCF,result:result}}
+
+function recommend(inclCF,drOnly){var btn=inclCF?document.getElementById(drOnly?'btnOptDRCF':'btnRecommendCF'):document.getElementById(drOnly?'btnOptDR':'btnRecommend');var tid=inclCF?'recommendResultsCF':'recommendResults';btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Calculating...';setTimeout(function(){doRecommend(inclCF,drOnly,btn,tid)},50)}
+
+function doRecommend(inclCF,drOnly,btn,tid){
+  var gross=pn(document.getElementById('grossSalary').value),superBal=pn(document.getElementById('superBalance').value),sgPct=pn(document.getElementById('sgRate').value)/100,retPct=pn(document.getElementById('investReturn').value)/100,existCC=pn(document.getElementById('existingCC').value),hp=document.getElementById('hasPrivateHealth').checked,isSingle=document.getElementById('mlsStatus').value==='single',curAge=getAge(document.getElementById('dob').value),years=getYears(),ccCap=30000,sg=gross*sgPct,maxSS=Math.max(0,ccCap-sg-existCC),cfAvail=inclCF?getCFAvail():0,proRata=getProRata(),priorBal=inclCF?pn(document.getElementById('priorSuperBal').value):0;
+  var fixedSS=drOnly?pn(document.getElementById('salarySacrifice').value):null;
+  var ssStart=drOnly?fixedSS:maxSS,ssEnd=drOnly?fixedSS:0,ssStep=drOnly?1:100;
+  var bestSuperAdv=-Infinity,bestTaxSaved=0,bestSS=0,bestDRArr=[],bestCFAlloc=[];
+  for(var ss=ssStart;ss>=ssEnd;ss-=ssStep){
+    var cfAlloc=new Array(years).fill(0),result=null;
+    if(inclCF&&cfAvail>0){
+      var cfRem=cfAvail;
+      for(var y=0;y<years;y++){if(cfRem<=0)break;
+        var eligible=true;
+        if(y===0){eligible=priorBal<500000}
+        else{var checkR=findRoundedDRs(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,true,proRata);eligible=checkR?checkR.res.ttrRows[y-1].totalSuper<500000:false}
+        if(!eligible)continue;
+        var found=findMaxCFForYear(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,true,proRata,y,cfRem);
+        cfAlloc[y]=found.cf;cfRem-=found.cf;result=found.result}
+      if(!result)result=findRoundedDRs(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,true,proRata);
+      if(!result){cfAlloc=new Array(years).fill(0);result=findRoundedDRs(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,false,proRata)}
+    }else{result=findRoundedDRs(gross,superBal,sgPct,retPct,existCC,ss,hp,isSingle,years,curAge,cfAlloc,cfAvail,false,proRata)}
+    if(!result)continue;
+    var res=result.res,drArr=result.drArr,tL=res.ttrRows[years-1],bL=res.baseRows[years-1],superAdv=tL.totalSuper-bL.superBal;
+    var totalBT=0,totalTT=0;for(var i=0;i<years;i++){totalBT+=res.baseRows[i].tax+res.baseRows[i].div293;totalTT+=res.ttrRows[i].tax+res.ttrRows[i].div293+res.ttrRows[i].pensionTax}
+    var taxSaved=totalBT-totalTT;
+    if(superAdv>bestSuperAdv+.5||(Math.abs(superAdv-bestSuperAdv)<1&&taxSaved>bestTaxSaved)){bestSuperAdv=superAdv;bestTaxSaved=taxSaved;bestSS=ss;bestDRArr=drArr.slice();bestCFAlloc=cfAlloc.slice()}
+    if(drOnly)break}
+  var el=document.getElementById(tid);el.style.display='block';
+  if(bestSuperAdv===-Infinity){el.innerHTML=drOnly?'<strong>Cannot keep cash positive with SS '+fmt(fixedSS)+'.</strong><br><span style="color:var(--text-light)">Reduce SS or use full optimiser.</span>':'<strong>No valid combination found.</strong>'}
+  else{var drText='',allS=true;for(var i=1;i<bestDRArr.length;i++){if(Math.abs(bestDRArr[i]-bestDRArr[0])>.0005){allS=false;break}}
+    if(allS&&bestDRArr.length>0)drText='DR: <strong>'+(bestDRArr[0]*100).toFixed(1)+'%</strong> (all years)';else{drText='DRs:';for(var i=0;i<bestDRArr.length;i++)drText+=' Y'+(i+1)+': <strong>'+(bestDRArr[i]*100).toFixed(1)+'%</strong>'}
+    var cfNote='';if(inclCF){var anyCF=false;bestCFAlloc.forEach(function(v){if(v>0)anyCF=true});if(anyCF){cfNote='<br>CF:';for(var y=0;y<bestCFAlloc.length;y++){if(bestCFAlloc[y]>0)cfNote+=' Y'+(y+1)+': <strong>'+fmt(bestCFAlloc[y])+'</strong>'}}else cfNote='<br><span style="color:var(--text-light)">No CF improves outcome.</span>'}
+    var ssLabel=drOnly?'SS (your input): <strong>'+fmt(bestSS)+'</strong>':'SS: <strong>'+fmt(bestSS)+'</strong>';
+    el.innerHTML='<strong>Recommended</strong><br>'+ssLabel+'<br>'+drText+'<br>Super adv: <strong>'+fmt(bestSuperAdv)+'</strong> | Tax saved: <strong>'+fmt(bestTaxSaved)+'</strong>'+cfNote+'<br><span style="font-size:.75rem;color:var(--text-light)">All years cash-positive.</span><br><button class="btn btn-sm" style="margin-top:6px" onclick=\'applyRec('+bestSS+','+JSON.stringify(bestDRArr)+','+inclCF+','+JSON.stringify(bestCFAlloc)+','+drOnly+')\'>Apply</button>'}
+  btn.disabled=false;if(drOnly)btn.textContent=inclCF?'Optimise DR Only (incl. CF)':'Optimise Drawdown Only';else btn.textContent=inclCF?'Optimal Values (incl. CF)':'Recommend Optimal Values'}
+
+function applyRec(ss,drArr,iCF,cfA,drOnly){saveState();if(!drOnly)document.getElementById('salarySacrifice').value=ss.toLocaleString('en-AU');if(drArr&&drArr.length>0){var allS=true;for(var i=1;i<drArr.length;i++){if(Math.abs(drArr[i]-drArr[0])>.0005){allS=false;break}}if(allS){document.getElementById('drawdownRate').value=(drArr[0]*100).toFixed(1);document.getElementById('usePerYearDR').checked=false;document.getElementById('perYearDRArea').style.display='none'}else{document.getElementById('drawdownRate').value=(drArr[0]*100).toFixed(1);document.getElementById('usePerYearDR').checked=true;document.getElementById('perYearDRArea').style.display='block';buildDRRows();var inp=document.querySelectorAll('.dr-year-input');for(var i=0;i<inp.length&&i<drArr.length;i++)inp[i].value=(drArr[i]*100).toFixed(1)}}if(iCF&&cfA){var inp=document.querySelectorAll('.cf-utilise-input');for(var i=0;i<inp.length;i++)inp[i].value=(cfA[i]||0)?cfA[i].toLocaleString('en-AU'):'0'}calculate()}
+
+function buildChart(cid,title,datasets,labels){var c=document.getElementById(cid);if(!c)return;c.innerHTML='';var box=document.createElement('div');box.className='chart-box';var h3=document.createElement('h3');h3.textContent=title;box.appendChild(h3);var leg=document.createElement('div');leg.className='chart-legend';datasets.forEach(function(ds){var it=document.createElement('div');it.className='chart-legend-item';var sw=document.createElement('span');sw.className='chart-legend-swatch';sw.style.background=ds.color;var tx=document.createElement('span');tx.textContent=ds.label;it.appendChild(sw);it.appendChild(tx);leg.appendChild(it)});box.appendChild(leg);var cv=document.createElement('canvas');cv.style.display='block';cv.style.width='100%';box.appendChild(cv);c.appendChild(box);requestAnimationFrame(function(){requestAnimationFrame(function(){renderChart(cv,datasets,labels)})})}
+function renderChart(cv,datasets,labels){var dpr=window.devicePixelRatio||1,rect=cv.getBoundingClientRect(),w=Math.round(rect.width);if(w<100)w=600;var h=300;cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);cv.style.width=w+'px';cv.style.height=h+'px';var ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);var pL=70,pR=60,pT=12,pB=36,cW=w-pL-pR,cH=h-pT-pB,n=labels.length;if(n<1)return;var allV=[];datasets.forEach(function(ds){ds.data.forEach(function(v){allV.push(v)})});if(!allV.length)return;var rMin=Math.min.apply(null,allV),rMax=Math.max.apply(null,allV),rng=rMax-rMin;if(!rng)rng=Math.max(Math.abs(rMax)*.1,1000);var step=rng/5,mag=Math.pow(10,Math.floor(Math.log10(step)));step=Math.ceil(step/mag)*mag;if(!step)step=1000;var aMin=Math.floor(rMin/step)*step,aMax=Math.ceil(rMax/step)*step;if(aMin===aMax)aMax+=step;var aRng=aMax-aMin,nS=Math.round(aRng/step);ctx.fillStyle='#fafbfc';ctx.fillRect(pL,pT,cW,cH);ctx.strokeStyle='#e8ebed';ctx.lineWidth=1;for(var i=0;i<=nS;i++){var y=Math.round(pT+cH-(cH*i/nS))+.5;ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+cW,y);ctx.stroke()}ctx.fillStyle='#5a6a7a';ctx.font='10px -apple-system,sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';for(var i=0;i<=nS;i++)ctx.fillText(fmtAxis(aMin+step*i),pL-8,Math.round(pT+cH-(cH*i/nS))+.5);ctx.textAlign='center';ctx.textBaseline='top';var sk=1;if(n>20)sk=4;else if(n>12)sk=3;else if(n>8)sk=2;for(var i=0;i<n;i++){var x=n===1?pL+cW/2:pL+(cW*i/(n-1));if(i%sk===0||i===n-1){ctx.fillStyle='#5a6a7a';ctx.fillText(labels[i],x,pT+cH+8);ctx.strokeStyle='#bdc3c7';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(Math.round(x)+.5,pT+cH);ctx.lineTo(Math.round(x)+.5,pT+cH+4);ctx.stroke()}}ctx.strokeStyle='#95a5a6';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+cH);ctx.lineTo(pL+cW,pT+cH);ctx.stroke();datasets.forEach(function(ds){if(!ds.data||!ds.data.length)return;ctx.strokeStyle=ds.color;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.lineCap='round';ctx.beginPath();for(var i=0;i<ds.data.length;i++){var x=n===1?pL+cW/2:pL+(cW*i/(n-1));var y=pT+cH-((ds.data[i]-aMin)/aRng*cH);if(!i)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.fillStyle=ds.color;var pr=n>15?2:3;for(var i=0;i<ds.data.length;i++){var x=n===1?pL+cW/2:pL+(cW*i/(n-1));var y=pT+cH-((ds.data[i]-aMin)/aRng*cH);ctx.beginPath();ctx.arc(x,y,pr,0,Math.PI*2);ctx.fill()}var li=ds.data.length-1,lx=n===1?pL+cW/2:pL+(cW*li/(n-1)),ly=pT+cH-((ds.data[li]-aMin)/aRng*cH);ctx.font='bold 10px -apple-system,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(fmtAxis(ds.data[li]),lx+6,ly)})}
+
+function exportCSV(type){var d,f,h;if(type==='base'){h=['Year','Age','Taxable Income','Tax+Medicare','Div293','Net Pay','SG','Super Earnings','Super Balance'];d=storedBase.map(function(r){return[r.y,r.age,r.ti,r.tax,r.div293,r.netPay,r.sg,r.earnings,r.superBal]});f='ttr_base_case.csv'}else if(type==='ttr'){h=['Year','Age','Pro-Rata%','Sal Sacrifice','DR%','Taxable Income','Tax+ML','Div293','Net Salary','Pension Draw','Net Cash','Pension Bal','Accum Bal','Total Super'];d=storedTTR.map(function(r){return[r.y,r.age,(r.proRata*100).toFixed(1),r.ss,(r.actDR*100).toFixed(1),r.ti,r.tax,r.div293,r.netSalary,r.pensionDraw,r.totalCash,r.pBal,r.aBal,r.totalSuper]});f='ttr_strategy.csv'}else{h=['Year','Age','Base Net Pay','TTR Net Cash','Cash Diff','Base Super','TTR Super','Super Diff','Base Tax','TTR Tax','Tax Saved'];d=storedCompare;f='ttr_comparison.csv'}var csv=h.join(',')+'\n';d.forEach(function(r){csv+=r.map(function(v){return typeof v==='string'?v:Math.round(v)}).join(',')+'\n'});var b=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f;a.click()}
+
+function calculate(){saveState();
+  var dob=document.getElementById('dob').value,gross=pn(document.getElementById('grossSalary').value),superBal=pn(document.getElementById('superBalance').value),sgPct=pn(document.getElementById('sgRate').value)/100,retPct=pn(document.getElementById('investReturn').value)/100,existCC=pn(document.getElementById('existingCC').value),ss=pn(document.getElementById('salarySacrifice').value),drPct=pn(document.getElementById('drawdownRate').value)/100,hp=document.getElementById('hasPrivateHealth').checked,isSingle=document.getElementById('mlsStatus').value==='single',useCF=document.getElementById('useCarryForward').checked,cfAmts=useCF?getCFU():[],drArr=getDRPerYear(),curAge=getAge(dob),pa=getPA(dob),years=getYears(),ccCap=30000,proRata=getProRata();
+  var res=runSim(gross,superBal,sgPct,retPct,existCC,ss,drPct,hp,isSingle,years,curAge,cfAmts,useCF,drArr);var B=res.baseRows,T=res.ttrRows;storedBase=B;storedTTR=T;document.getElementById('results').style.display='block';
+  var bL=B[B.length-1],tL=T[T.length-1],sDiff=tL.totalSuper-bL.superBal,tBT=0,tTT=0;for(var i=0;i<years;i++){tBT+=B[i].tax+B[i].div293;tTT+=T[i].tax+T[i].div293+T[i].pensionTax}var tSav=tBT-tTT,y1CD=T[0].totalCash-B[0].netPay;
+  var prNote=proRata<.999?' (Yr1 '+(proRata*100).toFixed(0)+'% pro-rata)':'';
+  document.getElementById('summaryGrid').innerHTML='<div class="result-box"><div class="label">Period</div><div class="value">'+years+'yr</div><div class="sub">Age '+curAge+'-'+(curAge+years)+prNote+'</div></div><div class="result-box"><div class="label">Yr 1 Cash Diff</div><div class="value '+(y1CD>=0?'pos':'neg')+'">'+fmt(y1CD)+'</div><div class="sub">'+(y1CD>=0?'More':'Less')+' with TTR</div></div><div class="result-box"><div class="label">Base Super</div><div class="value">'+fmt(bL.superBal)+'</div><div class="sub">At retirement</div></div><div class="result-box"><div class="label">TTR Super</div><div class="value">'+fmt(tL.totalSuper)+'</div><div class="sub">At retirement</div></div><div class="result-box highlight half"><div class="label">Super Advantage</div><div class="value" style="color:'+(sDiff>=0?'var(--green)':'var(--red)')+'">'+fmt(sDiff)+'</div><div class="sub">'+(sDiff>=0?'Better':'Worse')+' with TTR</div></div><div class="result-box half" style="background:var(--blue-light);border-color:var(--blue)"><div class="label">Tax Saved ('+years+'yr)</div><div class="value" style="color:'+(tSav>=0?'var(--green)':'var(--red)')+'">'+fmt(tSav)+'</div></div>';
+
+  // ELIGIBILITY CHECKS - with corrected CC cap logic
+  var sg=gross*sgPct,ck='';
+  function chk(o,m){return'<div class="check-item"><span class="check-icon" style="color:'+(o?'var(--green)':'var(--red)')+'">'+(o?'✓':'✗')+'</span><span>'+m+'</span></div>'}
+  function wrn(m){return'<div class="check-item"><span class="check-icon" style="color:var(--orange)">⚠</span><span>'+m+'</span></div>'}
+
+  if(curAge>=pa&&curAge<65)ck+=chk(true,'TTR eligible (preservation age '+pa+').');else if(curAge>=65)ck+=wrn('Over 65. Unrestricted access.');else ck+=chk(false,'Not reached preservation age ('+pa+').');
+
+  // Check CC cap per year - account for carry-forward increasing effective cap
+  for(var y=0;y<years;y++){
+    var yPR=(y===0)?proRata:1;
+    var yCF=useCF&&cfAmts[y]?cfAmts[y]*yPR:0;
+    var ySS=ss*yPR;
+    var yTotalCC=sg+existCC+ySS+yCF;
+    var yEffCap=ccCap;
+
+    // If CF is enabled and this year has CF, the effective cap increases by the CF amount
+    if(useCF&&yCF>0){
+      // Check CF eligibility for this year
+      var cfEligible=true;
+      if(y===0){cfEligible=pn(document.getElementById('priorSuperBal').value)<500000}
+      else{cfEligible=T[y-1].totalSuper<500000}
+      if(cfEligible){
+        yEffCap=ccCap+yCF;// effective cap is standard cap + CF being used
+      }
+    }
+
+    if(yTotalCC>yEffCap){
+      ck+=chk(false,'Yr '+(y+1)+' CCs '+fmt(yTotalCC)+' exceed effective cap '+fmt(yEffCap)+' by '+fmt(yTotalCC-yEffCap)+'.');
+    }else if(y===0){
+      // Only show green tick for year 1 to avoid clutter
+      var capLabel=yEffCap>ccCap?fmt(yEffCap)+' (incl. carry-forward)':fmt(yEffCap);
+      ck+=chk(true,'Yr 1 CCs '+fmt(yTotalCC)+' within effective cap '+capLabel+'.');
+    }
+  }
+
+  if(proRata<.999)ck+=wrn('Year 1 pro-rated '+(proRata*100).toFixed(1)+'%.');
+  var iDR=pn(document.getElementById('drawdownRate').value)/100;if(iDR<getMinDR(curAge+1))ck+=wrn('DR below minimum.');if(iDR>.10)ck+=chk(false,'Max DR 10%.');
+
+  // Div 293 check using year 1 total CCs
+  var y1PR=proRata;var y1CF=useCF&&cfAmts[0]?cfAmts[0]*y1PR:0;var y1CC=sg+existCC+ss*y1PR+y1CF;
+  if(gross+y1CC>250000)ck+=wrn('Div 293 applies (income + CCs '+fmt(gross+y1CC)+' > $250k).');else ck+=chk(true,'No Div 293.');
+
+  // MLS check
+  if(!hp){var mlsThresh=isSingle?101000:202000;if(gross>mlsThresh)ck+=wrn('MLS applies: no private cover, income above '+fmt(mlsThresh)+'.');else ck+=chk(true,'Below MLS threshold.')}
+
+  // CF eligibility checks
+  if(useCF){var pBal=pn(document.getElementById('priorSuperBal').value),tCF=updateCF();
+    if(pBal>=500000)ck+=chk(false,'Prior bal >= $500k. CF not available.');
+    else{ck+=chk(true,'CF eligible. Available: '+fmt(tCF)+'.');var tU=0;cfAmts.forEach(function(v){tU+=v});if(tU>tCF)ck+=chk(false,'CF utilisation '+fmt(tU)+' exceeds available '+fmt(tCF)+'.')}
+    for(var y=0;y<years;y++){if(!cfAmts[y])continue;var eBal=y===0?pBal:T[y-1].totalSuper;if(eBal>=500000)ck+=wrn('Yr '+(y+1)+': prior bal '+fmt(eBal)+' >= $500k. CF ineligible.')}
+    for(var y=0;y<years;y++){if(T[y].totalSuper>=500000){ck+=wrn('Super exceeds $500k from Yr '+(y+1)+'. CF eligibility may be lost.');break}}}
+  document.getElementById('checksArea').innerHTML=ck;
+
+  var showPR=proRata<.999;
+  var bH='<table class="data-table"><thead><tr><th>Yr</th><th>Age</th><th class="r">Tax Inc</th><th class="r">Tax+ML</th><th class="r">D293</th><th class="r">Net Pay</th><th class="r">SG</th><th class="r">Earn</th><th class="r">Super</th></tr></thead><tbody>';B.forEach(function(r){bH+='<tr><td>'+r.y+'</td><td>'+r.age+'</td><td class="r">'+fmt(r.ti)+'</td><td class="r">'+fmt(r.tax)+'</td><td class="r">'+fmt(r.div293)+'</td><td class="r">'+fmt(r.netPay)+'</td><td class="r">'+fmt(r.sg)+'</td><td class="r">'+fmt(r.earnings)+'</td><td class="r">'+fmt(r.superBal)+'</td></tr>'});bH+='</tbody></table>';document.getElementById('baseTable').innerHTML=bH;
+  var tH='<table class="data-table"><thead><tr><th>Yr</th><th>Age</th>'+(showPR?'<th class="r">PR</th>':'')+'<th class="r">SS</th><th class="r">DR</th><th class="r">Tax Inc</th><th class="r">Tax</th><th class="r">D293</th><th class="r">Net Sal</th><th class="r">Pen Dr</th><th class="r">Cash</th><th class="r">Pen</th><th class="r">Acc</th><th class="r">Total</th></tr></thead><tbody>';T.forEach(function(r){tH+='<tr><td>'+r.y+'</td><td>'+r.age+'</td>'+(showPR?'<td class="r">'+(r.proRata*100).toFixed(0)+'%</td>':'')+'<td class="r">'+fmt(r.ss)+'</td><td class="r">'+(r.actDR*100).toFixed(1)+'%</td><td class="r">'+fmt(r.ti)+'</td><td class="r">'+fmt(r.tax)+'</td><td class="r">'+fmt(r.div293)+'</td><td class="r">'+fmt(r.netSalary)+'</td><td class="r">'+fmt(r.pensionDraw)+'</td><td class="r">'+fmt(r.totalCash)+'</td><td class="r">'+fmt(r.pBal)+'</td><td class="r">'+fmt(r.aBal)+'</td><td class="r">'+fmt(r.totalSuper)+'</td></tr>'});tH+='</tbody></table>';document.getElementById('ttrTable').innerHTML=tH;
+  storedCompare=[];var cH='<table class="data-table"><thead><tr><th>Yr</th><th>Age</th><th class="r">Base Pay</th><th class="r">TTR Cash</th><th class="r">Cash Δ</th><th class="r">Base Super</th><th class="r">TTR Super</th><th class="r">Super Δ</th><th class="r">B Tax</th><th class="r">T Tax</th><th class="r">Saved</th></tr></thead><tbody>';
+  for(var i=0;i<years;i++){var b=B[i],t=T[i],cd=t.totalCash-b.netPay,sd=t.totalSuper-b.superBal,bt=b.tax+b.div293,tt=t.tax+t.div293+t.pensionTax,ts=bt-tt;storedCompare.push([b.y,b.age,b.netPay,t.totalCash,cd,b.superBal,t.totalSuper,sd,bt,tt,ts]);cH+='<tr><td>'+b.y+'</td><td>'+b.age+'</td><td class="r">'+fmt(b.netPay)+'</td><td class="r">'+fmt(t.totalCash)+'</td><td class="r '+(cd>=0?'pos':'neg')+'">'+fmt(cd)+'</td><td class="r">'+fmt(b.superBal)+'</td><td class="r">'+fmt(t.totalSuper)+'</td><td class="r '+(sd>=0?'pos':'neg')+'">'+fmt(sd)+'</td><td class="r">'+fmt(bt)+'</td><td class="r">'+fmt(tt)+'</td><td class="r '+(ts>=0?'pos':'neg')+'">'+fmt(ts)+'</td></tr>'}cH+='</tbody></table>';document.getElementById('compareTable').innerHTML=cH;
+  var anyCF=false;if(useCF)cfAmts.forEach(function(v){if(v>0)anyCF=true});
+  if(anyCF){document.getElementById('cfTabBtn').style.display='inline-block';var rNC=runSim(gross,superBal,sgPct,retPct,existCC,ss,drPct,hp,isSingle,years,curAge,[],false,drArr);var cfH='<table class="data-table"><thead><tr><th>Yr</th><th>Age</th><th class="r">CF</th><th class="r">No CF</th><th class="r">With CF</th><th class="r">Super Δ</th><th class="r">Tax NC</th><th class="r">Tax WC</th><th class="r">Saved</th></tr></thead><tbody>';for(var i=0;i<years;i++){var nc=rNC.ttrRows[i],wc=T[i],sd=wc.totalSuper-nc.totalSuper,nct=nc.tax+nc.div293+nc.pensionTax,wct=wc.tax+wc.div293+wc.pensionTax,ts=nct-wct;cfH+='<tr><td>'+wc.y+'</td><td>'+wc.age+'</td><td class="r">'+fmt(wc.cf)+'</td><td class="r">'+fmt(nc.totalSuper)+'</td><td class="r">'+fmt(wc.totalSuper)+'</td><td class="r '+(sd>=0?'pos':'neg')+'">'+fmt(sd)+'</td><td class="r">'+fmt(nct)+'</td><td class="r">'+fmt(wct)+'</td><td class="r '+(ts>=0?'pos':'neg')+'">'+fmt(ts)+'</td></tr>'}cfH+='</tbody></table>';document.getElementById('cfTable').innerHTML=cfH}else document.getElementById('cfTabBtn').style.display='none';
+  var cl=B.map(function(r){return'Y'+r.y});
+  buildChart('baseChartArea','Base Case: Super Balance',[{label:'Super',color:'#00b67a',data:B.map(function(r){return r.superBal})}],cl);
+  buildChart('ttrChartArea','TTR: Balance Breakdown',[{label:'Total',color:'#00b67a',data:T.map(function(r){return r.totalSuper})},{label:'Pension',color:'#3498db',data:T.map(function(r){return r.pBal})},{label:'Accum',color:'#8e44ad',data:T.map(function(r){return r.aBal})}],cl);
+  buildChart('compareChartArea','Comparison',[{label:'Base',color:'#e74c3c',data:B.map(function(r){return r.superBal})},{label:'TTR',color:'#00b67a',data:T.map(function(r){return r.totalSuper})}],cl);
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'})}
+
+function resetForm(){saveState();document.getElementById('dob').value='1965-07-01';document.getElementById('retirementAge').value=65;document.getElementById('grossSalary').value='100,000';document.getElementById('superBalance').value='400,000';document.getElementById('sgRate').value=12;document.getElementById('investReturn').value=7;document.getElementById('existingCC').value='0';document.getElementById('salarySacrifice').value='20,000';document.getElementById('drawdownRate').value=2.5;document.getElementById('useProRata').checked=false;document.getElementById('proRataFields').style.display='none';document.getElementById('startDate').value='2026-01-01';document.getElementById('reinvestPension').checked=false;document.getElementById('hasPrivateHealth').checked=true;document.getElementById('mlsStatus').value='single';document.getElementById('useCarryForward').checked=false;document.getElementById('cfInputs').style.display='none';document.getElementById('usePerYearDR').checked=false;document.getElementById('perYearDRArea').style.display='none';document.getElementById('results').style.display='none';document.getElementById('recommendResults').style.display='none';document.getElementById('recommendResultsCF').style.display='none';updatePA();updateProRata()}
+</script>
+</body>
+</html>
